@@ -1,6 +1,6 @@
-## Общие приколы JS
+## 1. Общие приколы JS
 
-### 1. В чем разница между значением и ссылкой на значение ?
+### 1.1. В чем разница между значением и ссылкой на значение ?
 
 <details>
 <summary>Ответ</summary>
@@ -16,7 +16,7 @@ copyReference.surname = "Shine"; // обращаемся по ссылке copyR
 
 </details>
 
-### 2. Как создать копию объекта ?
+### 1.2. Как создать копию объекта ?
 
 <details>
 <summary>Ответ</summary>
@@ -57,7 +57,7 @@ const copyObj = iterationCopy(source);
 
 </details>
 
-### 3. В чем разница между _shallow_ и _deep_ копией ?
+### 1.3. В чем разница между _shallow_ и _deep_ копией ?
 
 <details>
 <summary>Ответ</summary>
@@ -97,7 +97,7 @@ shallowCopy.personal.veryPersonal.favoriteManga = "Tokyo Ghoul :Re"; // favorite
 
 </details>
 
-### 4. В чем разница между `var`, `let` и `const` ?
+### 1.4. В чем разница между `var`, `let` и `const` ?
 
 <details>
 <summary>Ответ</summary>
@@ -114,7 +114,7 @@ shallowCopy.personal.veryPersonal.favoriteManga = "Tokyo Ghoul :Re"; // favorite
 
 </details>
 
-### 5. Можно ли переопределять `var`, `let` и `const` ?
+### 1.5. Можно ли переопределять `var`, `let` и `const` ?
 
 <details>
 <summary>Ответ</summary>
@@ -125,7 +125,7 @@ shallowCopy.personal.veryPersonal.favoriteManga = "Tokyo Ghoul :Re"; // favorite
  * Видел такую задачу моего старого лида.
  * Переменная temp объевляется внутри блока.
  * Поэтому temp видна только внутри блока, потому что это const.
- * А вот если бы это был var temp, все было бы ок, потому что var ограничивается только функцией :)
+ * А вот если бы это был var temp, все было бы ок, потому что var ограничивается только функцией.
  *
  */
 
@@ -140,7 +140,7 @@ function task3() {
   }
 
   console.log(left, right); // выведется "right", "left", все ок
-  console.log(temp); // а тут смэрть :)
+  console.log(temp); // а тут смэрть
 }
 
 /**
@@ -162,25 +162,25 @@ function task3() {
   }
 
   console.log(left, right); // вот тут выведется "left", "right", потому что перестановки выполнялись с новыми переменными
-  console.log(temp); // а тут все еще смэрть
+  console.log(temp); // тут все еще смэрть
 }
 ```
 
 </details>
 
-### 6. [Классическая гнилая задача про всплытие](./common-js-stuff/hoisting.md).
+### 1.6. [Классическая гнилая задача про всплытие](./common-js-stuff/hoisting.md).
 
 <details>
 <summary>Ответ</summary>
 </details>
 
-### 7. [Классическая задача про стрелков](./shooters.md) (с выходом в `let`).
+### 1.7. [Классическая задача про стрелков](./shooters.md) (с выходом в `let`).
 
 <details>
 <summary>Ответ</summary>
 </details>
 
-### 8. Что такое temporal dead zone ?
+### 1.8. Что такое temporal dead zone ?
 
 <details>
 <summary>Ответ</summary>
@@ -189,7 +189,7 @@ function task3() {
 
 </details>
 
-### 9. Расскажи что знаешь про Set и Map.
+### 1.9. Расскажи что знаешь про Set и Map.
 
 <details>
 <summary>Ответ</summary>
@@ -198,14 +198,14 @@ function task3() {
 
 </details>
 
-### 10. [Задача про Set](./common-js-stuff/set.md).
+### 1.10. [Задача про Set](./common-js-stuff/set.md).
 
 <details>
 <summary>Ответ</summary>
 
 </details>
 
-### 11. Есть два объекта `Date`. Как узнать, какая из дат раньше ?
+### 1.11. Есть два объекта `Date`. Как узнать, какая из дат раньше ?
 
 <details>
 <summary>Ответ</summary>
@@ -216,14 +216,74 @@ function task3() {
 
 ---
 
-## Types
+## 2. Типы
 
-| Вопрос                                              |
-| --------------------------------------------------- |
-| [Задача про приведение типов](./types/casting.md).  |
-| Назови типы данных в JS.                            |
-| [Найти первое число](./types/find-first-number.md). |
-| Что будет в результате `1 + 2 + '3'` ?              |
+### 2.1. [Задача про приведение типов](./types/casting.md).
+
+### 2.2. Назови типы данных в JS.
+
+<details>
+<summary>Ответ</summary>
+
+~~Вот они слева направо:~~
+
+- Number;
+- BigInt;
+- String;
+- Boolean;
+- null (`typeof null === 'object'`, но это неправда :D);
+- undefined;
+- Object;
+
+Насчет Array:
+
+- `typeof [] === 'object'`;
+- `[] instanceof Object === true`;
+- `Array.prototype.__proto__ === Object.prototype`;
+
+</details>
+
+### 2.3. [Найти первое число](./types/find-first-number.md).
+
+<details>
+<summary>Ответ</summary>
+
+```js
+const firstNumber [null, null, undefined, "12asas", "111", 11, 2, 3, 4, 6].find(
+  (item) => typeof item === "number"
+);
+```
+
+Еще часто проверяют так, но в этой задаче это неправильно (из-за приведения типов).
+
+`isNaN` неявно приводит свой аргумент к числу.
+
+В первой итерации цикла `isNaN` пытается привести `"12asas"` к к Number и получает `NaN`.
+
+Идет дальше, пытается привести `null` к к числу **и получает число 0**.
+
+После этого цикл ошибочно считает, что число найдено, хотя на самом деле был найден `null`.
+
+```js
+const firstNumber [null, null, undefined, "12asas", "111", 11, 2, 3, 4, 6].find(
+  (item) => ["12asas", null, undefined, "111", 11, 2, 3, 4, 6].find(item => !Number.isNaN(item))
+);
+```
+
+</details>
+
+### 2.4. Что будет в результате `1 + 2 + '3'` ?.
+
+<details>
+<summary>Ответ</summary>
+
+`'33'` - сначала сложение чисел (1 + 2 = 3), потом конкатенация со строкой (3 + '3' = '33').
+
+```js
+1 + 2 + +"3"; // а тут будет 6, потому что один плюс пойдёт приводить строку '3' к числу :)
+```
+
+</details>
 
 ---
 
