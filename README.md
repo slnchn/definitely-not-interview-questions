@@ -233,6 +233,7 @@ function task3() {
 - Boolean;
 - null (`typeof null === 'object'`, но это неправда :D);
 - undefined;
+- Symbol;
 - Object;
 
 Насчет Array:
