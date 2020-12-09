@@ -1,23 +1,23 @@
 ```js
-// Что выведется в консоль ?
-// А если я закомментирую стрелочную функцию и раскомментирую обычную ?
-// А если вынесу содержимое метода run объекта obj3 из объекта obj3 ?
+// 1) Что выведется в консоль ?
+// 2) А если я закомментирую стрелочную функцию и раскомментирую обычную ?
+// 3) А если вынесу содержимое метода run объекта obj3 из объекта obj3 ?
 // Почему ?
 
 const obj3 = {
-  name: "obj3",
+  objName: "obj3",
 
   run() {
     const sayHello = () => {
-      console.log(`hello ${this.name}`);
+      console.log(`hello ${this.objName}`);
     };
 
     // function sayHello() {
-    //   console.log(`hello ${this.name}`);
+    //   console.log(`hello ${this.objName}`);
     // }
 
     const obj1 = {
-      name: "obj1",
+      objName: "obj1",
 
       run() {
         sayHello();
@@ -25,7 +25,7 @@ const obj3 = {
     };
 
     const obj2 = {
-      name: "obj2",
+      objName: "obj2",
 
       run() {
         sayHello();
