@@ -1,14 +1,17 @@
 ```js
+// Предполагается, что мы вызываем код ниже ве объектов и функций - просто код в файле
+// Что выведется в консоль ?
+
 const greet = () => {
-  console.log(`Hello! Meow name is ${this.name}`);
+  console.log(`Hello! Meow name is ${this.catName}`);
 };
 
 const japaneeseCat = {
-  name: "私の涙の果てしない海",
+  catName: "私の涙の果てしない海",
 };
 
 const belorussianCat = {
-  name: "Вадзiм",
+  catName: "Вадзiм",
 };
 
 const japaneeseCatGreet = greet.bind(japaneeseCat);
