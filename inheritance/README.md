@@ -130,9 +130,11 @@ Wizard.prototype = {
 };
 
 function Witcher() {}
-Witcher.prototype {
-  ...Warrior,
-  ...Wizard,
+Witcher.prototype = {
+  ...Warrior.prototype,
+  ...Wizard.prototype,
+
+  constructor: Witcher,
 };
 
 const geralt = new Witcher({ name: "Geralt of Rivia" });
