@@ -188,3 +188,59 @@ shooters.forEach((shooter) => shooter());
 Функции, созданные через Function declaration **всплывают**.
 
 </details>
+
+### 6.11 [Метод-обработчик-события](./onclick-method.md).
+
+<details>
+<summary>Ответ</summary>
+
+Работать не будет.
+
+Когда я добавляю обработчик вот так `buttonElement.addEventListener("click", this.onSubmit);`, метод onSubmit контекст выполнения.
+
+Это значит, что когда произойдет событие `click`, программа сломается, из-за того что `this` внутри `onSubmit` - это `window`, и в нем нет поля `newTaskTitle`.
+
+```js
+// более простой пример
+const cat = {
+  catName: "андрей",
+
+  sayHello() {
+    console.log(`Hello! Meow name is ${this.catName}.`);
+  },
+};
+
+cat.sayHello(); // все нормально, вызываем метод в контексте кота-Андрея
+
+const sayHello = cat.sayHello;
+sayHello(); // "Hello! Meow name is undefined", так как вызываем метод вне контекста (this === window)
+```
+
+Как исправить ?
+
+Привязать контекст:
+
+```js
+import { sendToDatabase } from "task.domain-model";
+
+class SubmitNewTaskButton {
+  constructor(props) {
+    this.newTaskTitle = props.newTaskTitle;
+
+    this.onSubmit = this.onSubmit.bind(this); // с этим будет работать
+  }
+
+  onSubmit() {
+    const updatedTitle = this.newTaskTitle.toLowerCase().trim();
+    sendToDatabase(updatedTitle);
+  }
+
+  render() {
+    const buttonElement = document.createElement("button");
+    buttonElement.addEventListener("click", this.onSubmit);
+    return buttonElement;
+  }
+}
+```
+
+</details>
