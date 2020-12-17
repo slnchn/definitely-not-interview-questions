@@ -1,6 +1,6 @@
 ## 5. DOM
 
-### 5.1. Какая разница между `element.innerHTML` и `element.outerHTML` ?
+### 4.1. Какая разница между `element.innerHTML` и `element.outerHTML` ?
 
 <details>
 <summary>Ответ</summary>
@@ -9,7 +9,7 @@
 
 </details>
 
-### <strong style="color: crimson;">5.2.</strong> Как можно добавить обработчик события клика на кнопку (несколько способов) ?
+### 4.2. Как можно добавить обработчик события клика на кнопку (несколько способов) ?
 
 <details>
 <summary>Ответ</summary>
@@ -54,7 +54,7 @@ button.addEventListener("click", (event) => {
 
 </details>
 
-### 5.3. Как убрать конкретный обработчик события ?
+### 4.3. Как убрать конкретный обработчик события ?
 
 <details>
 <summary>Ответ</summary>
@@ -71,7 +71,7 @@ button.removeEventListener("click", onClick); // remove event listener
 
 </details>
 
-### <strong style="color: crimson;">5.4.</strong> [Задача про котика](./cancel-basic-behavior.md).
+### 4.4. [Задача про котика](./cancel-basic-behavior.md).
 
 <details>
 <summary>Ответ</summary>

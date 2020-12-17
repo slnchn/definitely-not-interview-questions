@@ -97,7 +97,7 @@ shallowCopy.personal.veryPersonal.favoriteManga = "Tokyo Ghoul :Re"; // favorite
 
 </details>
 
-### <strong style="color: crimson;">1.4.</strong> В чем разница между `var`, `let` и `const` ?
+### 1.4. В чем разница между `var`, `let` и `const` ?
 
 <details>
 <summary>Ответ</summary>
@@ -168,7 +168,7 @@ function task3() {
 
 </details>
 
-### <strong style="color: crimson;">1.6.</strong> [Классическая гнилая задача про всплытие](./hoisting.md).
+### 1.6. [Классическая гнилая задача про всплытие](./hoisting.md).
 
 <details>
 <summary>Ответ</summary>
