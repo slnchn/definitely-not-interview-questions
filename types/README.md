@@ -18,11 +18,16 @@
 - Symbol;
 - Object;
 
-Насчет Array:
+Насчет `Array`:
 
 - `typeof [] === 'object'`;
 - `[] instanceof Object === true`;
 - `Array.prototype.__proto__ === Object.prototype`;
+
+Насчет `Function`:
+
+- Если вы выполните `typeof (function() {})` вернется строка `"function"`;
+- Но все же функция это не отдельный тип - она как и массив наследуется от объекта (`(function() {}) instanceof Object === true`);
 
 </details>
 
