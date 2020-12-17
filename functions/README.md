@@ -1,6 +1,6 @@
 ## 6. Functions
 
-### 6.1. Какая разница между `call` / `apply` / `bind` ?
+### <strong style="color: crimson;">6.1.</strong> Какая разница между `call` / `apply` / `bind` ?
 
 <details>
 <summary>Ответ</summary>
@@ -70,7 +70,7 @@
 
 </details>
 
-### 6.6. Предположим, в твоем браузере нет bind. Сделай так, чтобы был :3.
+### <strong style="color: crimson;">6.6.</strong> Предположим, в твоем браузере нет bind. Сделай так, чтобы был :3.
 
 <details>
 <summary>Ответ</summary>
@@ -101,7 +101,7 @@ if (!Function.prototype.bind) {
 
 </details>
 
-### 6.8. [Типичная задача про this](./this-is-this.md).
+### <strong style="color: crimson;">6.8.</strong> [Типичная задача про this](./this-is-this.md).
 
 <details>
 <summary>Ответ</summary>

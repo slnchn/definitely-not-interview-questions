@@ -1,6 +1,6 @@
 ## 7. Асинхронщина
 
-### 7.1. [Классическая задача про асинхронность](./typical-async-task.md).
+### <strong style="color: crimson;">7.1.</strong> [Классическая задача про асинхронность](./typical-async-task.md).
 
 <details>
 <summary>Ответ</summary>

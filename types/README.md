@@ -1,8 +1,8 @@
 ## 2. Типы
 
-### 2.1. [Задача про приведение типов](./casting.md).
+### <strong style="color: crimson;">2.1.</strong> [Задача про приведение типов](./casting.md).
 
-### 2.2. Назови типы данных в JS.
+### <strong style="color: crimson;">2.2.</strong> Назови типы данных в JS.
 
 <details>
 <summary>Ответ</summary>
