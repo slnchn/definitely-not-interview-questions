@@ -1,6 +1,77 @@
 ## 7. Асинхронщина
 
-### 7.1. [Классическая задача про асинхронность](./typical-async-task.md).
+### 7.1. [Классическая задача про асинхронность](./typical-async_low/typical-async_low.md) (low difficulty).
+
+<details>
+<summary>Ответ</summary>
+
+- Сначала выполняется синхронный код.
+
+```sh
+1
+4
+```
+
+- Потом первый таймаут идет считаться в WebAPI;
+- Когда он отсчитывается, он заносится в очередь асинхронных задач;
+- В очереди пусто поэтому коллбэк вызывается;
+
+```sh
+2
+```
+
+- Потом второй (вложенный) таймаут идет считаться в WebAPI;
+- Когда он отсчитывается, он заносится в очередь асинхронных задач;
+- В очереди пусто поэтому коллбэк вызывается;
+
+```sh
+3
+```
+
+[Статья Джейка Арчибальда на эту тему](https://jakearchibald.com/2015/tasks-microtasks-queues-and-schedules/);
+
+</details>
+
+### 7.2. [Классическая задача про асинхронность](./typical-async_medium/typical-async_medium.md) (medium difficulty).
+
+<details>
+<summary>Ответ</summary>
+
+- Сначала выполняется синхронный код.
+
+```sh
+1
+5
+```
+
+- Потом первый таймаут идет считаться в WebAPI;
+- Когда он отсчитывается, он заносится в очередь асинхронных задач;
+- Потом резолвается промис и первый `then` заносится в очередь микротасок;
+- Микротаски имеют приоритет над обычными тасками, поэтому сначала выведется первый `then`;
+
+```sh
+3
+```
+
+- После этого объявляется второй `then`;
+- Он добавляется в очередь микротасок;
+- Микротаски имеют приоритет над обычными тасками, поэтому второй `then` вызывается сейчас же;
+
+```sh
+4
+```
+
+- После этого из очереди обычных асинхронных задач вызывается коллбэк таймаута;
+
+```sh
+2
+```
+
+[Статья Джейка Арчибальда на эту тему](https://jakearchibald.com/2015/tasks-microtasks-queues-and-schedules/);
+
+</details>
+
+### 7.3. [Классическая задача про асинхронность](./typical-async-task/typical-async-task.md) (dead-inside difficulty).
 
 <details>
 <summary>Ответ</summary>
@@ -51,5 +122,101 @@
 "2"
 "1"
 ```
+
+</details>
+
+### 7.4. Зачем использовать `requestAnimationFrame` ?
+
+<details>
+<summary>Ответ</summary>
+
+- Приостановка анимации, когда вкладка в фоновом режиме или процессор перегружен;
+- Браузер выполняет анимацию в удобный для него момент;
+
+[Джейк Арчибальд объясняет то же самое, только лучше](https://youtu.be/cCOL7MC4Pl0?t=749)
+
+</details>
+
+### 7.5. [Промисификация](./promisification/promisification.md).
+
+<details>
+<summary>Ответ</summary>
+
+Нужно написать функции, которые возвращают промисы.
+
+[Решение](./promisification/promisification.js);
+
+</details>
+
+### 7.6. [Задача про блокирование потока](./main-thread-blocking/main-thread-blocking.md).
+
+<details>
+<summary>Ответ</summary>
+
+1. В JavaScript один поток.
+2. Перерисовка страницы выполняется в этом же потоке;
+3. Поэтому когда что-то блочит поток, перерисовка не происходит;
+
+[Джейк Арчибальд объясняет то же самое, только лучше](https://youtu.be/cCOL7MC4Pl0?t=534)
+
+</details>
+
+### 7.7. [Как незаметно заблокировать поток ?](./main-thread-ninja-blocking/main-thread-ninja-blocking.md).
+
+<details>
+<summary>Ответ</summary>
+
+Бесконечные таймауты не заблокируют поток, потому что это такие же таски, как и перерисовка.
+
+```js
+// не заблокирует поток
+function endlessTimeout() {
+  setTimeout(endlessTimeout, 0);
+}
+```
+
+---
+
+Бесконечные промисы заблокируют поток, потому что микротаски имеют приоритет над обычными тасками (перерисовкой страницы в том числе).
+
+```js
+// заблокирует поток
+function endlessPromise() {
+  return Promise.resolve().then(endlessPromise);
+}
+```
+
+[Джейк Арчибальд объясняет то же самое, только лучше (обычные таски и рендеринг)](https://youtu.be/cCOL7MC4Pl0?t=693)
+
+[Джейк Арчибальд объясняет то же самое, только лучше (микротаски и рендеринг)](https://youtu.be/cCOL7MC4Pl0?t=1618)
+
+</details>
+
+### 7.8. [Подождать выполнения всех промисов](./promise-all/promise-all.md).
+
+<details>
+<summary>Ответ</summary>
+
+Используй `Promise.all`.
+
+```js
+const usersRequest = axios("https://jsonplaceholder.typicode.com/users");
+const postsRequest = axios("https://jsonplaceholder.typicode.com/posts");
+
+Promise.all([usersRequest, postsRequest])
+  .then((results) => results.map((result) => result.data))
+  .then(([usersData, postsData]) => {
+    console.log(usersData, postsData);
+  });
+```
+
+</details>
+
+### 7.9. Какие еще статические методы промисов знаешь ?
+
+<details>
+<summary>Ответ</summary>
+
+[Статические методы промисов](https://learn.javascript.ru/promise-api).
 
 </details>
