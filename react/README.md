@@ -75,7 +75,7 @@ Virtual DOM и реальный DOM - два дерева.
 
 </details>
 
-### 8.1.5 Зачем нужен атрибут key ?
+### 8.1.5 Зачем нужен атрибут `key` ?
 
 <details>
 <summary>Ответ</summary>
@@ -447,7 +447,9 @@ class SomeComponent extends React.Component {
 <details>
 <summary>Ответ</summary>
 
-`PropTypes` работают во время выполнения приложения, а `TypeScript` только при статическом анализе кода.
+`TypeScript` на этапе сборки компилируется в обычный JavaScript без типов.  
+Код с `PropTypes` на этапе сборки компилируется в JavaScript, **причем конструкции проверки типов сохраняются**.  
+Это значит, что `PropTypes` работает и во время выполнения приложения, а `TypeScript` только при статическом анализе кода.
 
 </details>
 
@@ -457,7 +459,43 @@ class SomeComponent extends React.Component {
 <summary>Ответ</summary>
 
 HOC - high order component. Обертка вокруг изначального компонента.  
-Используется для реиспользования логики.
+Используется для реиспользования логики.  
+По конвенции нейминга, имя должно начинаться с _with_.
+
+Пример HOC:
+
+```jsx
+import React from "react";
+
+export default (BaseComponent) =>
+  class extends React.Component {
+    rootNode = React.createRef();
+
+    componentDidMount() {
+      if (this.props.closeOnOutsideClick) {
+        document.addEventListener("click", this.handleOutsideClick);
+      }
+    }
+
+    componentWillUnmount() {
+      if (this.props.closeOnOutsideClick) {
+        document.removeEventListener("click", this.handleOutsideClick);
+      }
+    }
+
+    handleOutsideClick = (event) => {
+      if (this.rootNode && !this.rootNode.current.contains(event.target)) {
+        this.props.onOutsideClick(false);
+      }
+    };
+
+    render() {
+      return <BaseComponent {...this.props} ref={this.rootNode} />;
+    }
+  };
+```
+
+Еще функция `connect` из `react-redux` _возвращает_ HOC.
 
 </details>
 
@@ -466,12 +504,16 @@ HOC - high order component. Обертка вокруг изначального
 <details>
 <summary>Ответ</summary>
 
+[React portal](https://ru.reactjs.org/docs/portals.html).
+
 </details>
 
 ### 8.1.21 `SyntheticEvent` ?
 
 <details>
 <summary>Ответ</summary>
+
+[SyntheticEvent](https://ru.reactjs.org/docs/events.html).
 
 </details>
 
@@ -480,12 +522,27 @@ HOC - high order component. Обертка вокруг изначального
 <details>
 <summary>Ответ</summary>
 
+[Контекст](https://ru.reactjs.org/docs/context.html).
+
 </details>
 
 ### 8.1.23 `Context` vs `useReducer` vs `Redux` ?
 
 <details>
 <summary>Ответ</summary>
+
+**В принципе `Context` vs `useReducer` vs `Redux` решают одну задачу, но нельзя сказать, что они заменяют друг друга.**
+
+У `Redux` большое сообщество, много доков, вопросов на StackOverflow, DevTools, в отличие от `Context` vs `useReducer` в `Redux` есть middleware для сайд эффектов.  
+Но dispatch даже одного action приводит к тому, что вызываются все reducers, поэтому не нужно прямо все данные приложения класть в `Redux`.
+
+Если компонент использует несколько `useState` (больше трех), то тут отлично подойдет `useReducer`.  
+Хоть `useReducer` и похож на reducer `Redux`, `useReducer` будет плохой заменой `Redux` на проекте, т.к. как минимум `useReducer` не поддерживает middleware и DevTools.
+
+Использование `Context` спорно.  
+Его можно использовать в случае, если глобальный стор нужно использовать только для чего-то одного (тема приложения, язык и т.д.).  
+То есть решить задачу встроенными возможностями `React`, не импортируя `Redux` (уменьшаем билд).  
+Но вообще `Context` лучше использовать не сильно много на странице (один-два раза).
 
 </details>
 
@@ -498,12 +555,25 @@ HOC - high order component. Обертка вокруг изначального
 <details>
 <summary>Ответ</summary>
 
+Аргументы в пользу хуков:
+
+- HOCи слишком абстрактные, с ними тяжело работать;
+- HOCи приводят к "HOC hell";
+- Virtual DOM засоряется хоками. Увеличение комопнентов -> уменьшение скорости согласования;
+- Нельзя использовать стейт в функциональных компонентах, а в классовых нужно постоянно думать о `bind`;
+- Сложно использовать `Context`;
+- Хуки декларативные;
+
 </details>
 
 ### 8.2.2 `useState` ?
 
 <details>
 <summary>Ответ</summary>
+
+[`useState`](https://ru.reactjs.org/docs/hooks-reference.html#usestate).
+
+[В сеттер можно передать коллбэк, который принимает предыдущий стейт](https://ru.reactjs.org/docs/hooks-reference.html#functional-updates).
 
 </details>
 
@@ -512,12 +582,53 @@ HOC - high order component. Обертка вокруг изначального
 <details>
 <summary>Ответ</summary>
 
+[Ленивая инициализация](https://ru.reactjs.org/docs/hooks-reference.html#lazy-initial-state).
+
+```jsx
+import React from "react";
+
+function difficultComputation(isActive) {
+  // slow sync function
+}
+
+function App() {
+  // при каждом ререндере будет вызываться difficultComputation
+  const [state, setState] = React.useState(difficultComputation());
+
+  // ...
+}
+```
+
+Если в `useState` передать коллбэк, он вызовется только при первом рендеринге.
+
+```jsx
+import React from "react";
+
+function difficultComputation(isActive) {
+  // slow sync function
+}
+
+function App() {
+  // difficultComputation вызовется только при первом рендеринге
+  const [state, setState] = React.useState(() => difficultComputation());
+
+  // ...
+}
+```
+
 </details>
 
 ### 8.2.4 `useEffect` ?
 
 <details>
 <summary>Ответ</summary>
+
+Сторонние эффекты и рендеринг должны быть независимы (интерфейс не должен _ломаться_, если запрос за данными вернул ошибку).  
+Поэтому сторонние эффекты выносят в `useEffect`.
+
+[`useEffect`](https://ru.reactjs.org/docs/hooks-reference.html#useeffect).
+
+`useEffect` === `componentDidMount` + `componentDidUpdate` + `componentWillUnmount`.
 
 </details>
 
@@ -526,12 +637,21 @@ HOC - high order component. Обертка вокруг изначального
 <details>
 <summary>Ответ</summary>
 
+[`useEffectLayout`](https://ru.reactjs.org/docs/hooks-reference.html#uselayouteffect).
+
+Вызывается после того, как компонент врендерился в DOM и его размеры посчитались.  
+Используется в основном для работы с элементами DOM.
+
 </details>
 
 ### 8.2.6 `useReducer` ?
 
 <details>
 <summary>Ответ</summary>
+
+[`useReducer`](https://ru.reactjs.org/docs/hooks-reference.html#usereducer).
+
+Если компонент использует несколько `useState` (больше трех), то тут отлично подойдет `useReducer`.
 
 </details>
 
@@ -540,12 +660,24 @@ HOC - high order component. Обертка вокруг изначального
 <details>
 <summary>Ответ</summary>
 
+Хоть `useReducer` и похож на reducer `Redux`, `useReducer` будет плохой заменой `Redux` на проекте, т.к. как минимум `useReducer` не поддерживает middleware и DevTools.
+
+Можно вынести сайд эффекты в `useEffect`, и использовать `useEffect` в качестве middleware, но это все же не то.  
+Для работы с данными (хранение, запросы за данными, нетривиальные изменения данных) лучше подойдет `Redux`.
+
 </details>
 
 ### 8.2.8 `useRef` ?
 
 <details>
 <summary>Ответ</summary>
+
+[`useRef`](https://ru.reactjs.org/docs/hooks-reference.html#useref).
+
+Можно использовать для:
+
+- хранения ссылки на uncontrolled элемент;
+- хранения значения, изменение которого не должно вызывать ререндеринг (супер редко);
 
 </details>
 
@@ -554,6 +686,8 @@ HOC - high order component. Обертка вокруг изначального
 <details>
 <summary>Ответ</summary>
 
+[`useContext`](https://ru.reactjs.org/docs/hooks-reference.html#usecontext).
+
 </details>
 
 ### 8.2.10 `useCallback` ?
@@ -561,12 +695,133 @@ HOC - high order component. Обертка вокруг изначального
 <details>
 <summary>Ответ</summary>
 
+[`useCallback`](https://ru.reactjs.org/docs/hooks-reference.html#usecallback).
+
 </details>
 
-### 8.2.11 `useMemo` ?
+### 8.2.11 Когда использовать `useCallback` ?
 
 <details>
 <summary>Ответ</summary>
+
+**Не всегда.**
+
+Ситуцация, когда все-таки нужно использовать `useCallback`:
+
+```jsx
+import React from "react";
+
+import axios from "axios";
+
+function FrequentlyUpdatedChild(props) {
+  const { frequentlyUpdatedValue } = props;
+  return <h1>{frequentlyUpdatedValue}</h1>;
+}
+
+function ChildWithComplexEffect(props) {
+  const { fetchData } = props;
+
+  const [data, setData] = React.useState(null);
+
+  // каждый раз, когда меняется проп fetchData, вызывается эффект на подтягивание данных
+  React.useEffect(() => {
+    fetchData().then((fetchedData) => {
+      setData(fetchedData);
+    });
+  }, [fetchData]);
+
+  return <h1>{data ? JSON.stringify(data) : data}</h1>;
+}
+
+function App() {
+  const [toggler, setToggler] = React.useState(false);
+
+  // Каждый раз при редрере (вызове App) функция fetchData объявляется заново
+  // Каждый раз при редрере (вызове App) функция fetchData заново создается в памяти
+  // Каждый раз при редрере (вызове App) функция ссылка на fetchData меняется
+  // Каждый раз при редрере (вызове App) в <ChildWithComplexEffect /> как бы передается другой проп (другая ссылка на fetchData, хотя сама функция делает то же)
+  // Каждый раз при редрере (вызове App) в <ChildWithComplexEffect /> вызывается эффект (так как он зависит от пропа fetchData)
+  function fetchData() {
+    return axios("https://api.kanye.rest?format=text").then(({ data }) => data);
+  }
+
+  return (
+    <>
+      {/* Каждый раз когда жму на кнопку Toggle, компонент ререндерится (вызывается App) */}
+      <button onClick={() => setToggler(!toggler)}>Toggle</button>
+      <FrequentlyUpdatedChild frequentlyUpdatedValue={toggler} />
+      {/* Каждый раз при ререндере ссылка на fetchData меняется и <ChildWithComplexEffect /> ререндерится (хотя ему не надо) */}
+      <ChildWithComplexEffect fetchData={fetchData} />
+    </>
+  );
+}
+```
+
+Решение:
+
+```jsx
+import React from "react";
+
+import axios from "axios";
+
+function FrequentlyUpdatedChild(props) {
+  const { frequentlyUpdatedValue } = props;
+  return <h1>{frequentlyUpdatedValue}</h1>;
+}
+
+function ChildWithComplexEffect(props) {
+  const { fetchData } = props;
+
+  const [data, setData] = React.useState(null);
+
+  // каждый раз, когда меняется проп fetchData, вызывается эффект на подтягивание данных
+  React.useEffect(() => {
+    fetchData().then((fetchedData) => {
+      setData(fetchedData);
+    });
+  }, [fetchData]);
+
+  return <h1>{data ? JSON.stringify(data) : data}</h1>;
+}
+
+function App() {
+  const [toggler, setToggler] = React.useState(false);
+
+  // Теперь ссылка на fetchData будет одинакова между ререндерами
+  const fetchData = React.useCallback(
+    () => axios("https://api.kanye.rest?format=text").then(({ data }) => data),
+    []
+  );
+
+  return (
+    <>
+      {/* Каждый раз когда жму на кнопку Toggle, компонент ререндерится (вызывается App) */}
+      <button onClick={() => setToggler(!toggler)}>Toggle</button>
+      <FrequentlyUpdatedChild frequentlyUpdatedValue={toggler} />
+      {/* Каждый раз при ререндере ссылка на fetchData такая же */}
+      {/* Ререндер не происходит */}
+      <ChildWithComplexEffect fetchData={fetchData} />
+    </>
+  );
+}
+```
+
+Но нужно помнить, что **оптимизация всегда имеет цену**.  
+Используя `useCallback` мы нагрузили React работой хранить в памяти между рендерами функцию.  
+Не нужно нагружать React работой без явной причины, это может сказаться на перфомансе.
+
+**Причина использовать `useCallback` - тяжелый эффект в дочернем компоненте, который лучше не вызывать без причины.**  
+В остальных случаях `useCallback` лучше не вызывать.
+Даже если передача ссылки на функцию влияет на ререндер, лишний ререндер не сильно замедлит повлияет на перфоманс, так как React умный (выполняет сверку и не рендерит в DOM просто так).
+
+</details>
+
+### 8.2.12 `useMemo` ?
+
+<details>
+<summary>Ответ</summary>
+
+[`useMemo`](https://ru.reactjs.org/docs/hooks-reference.html#usememo).
 
 </details>
 
@@ -578,6 +833,8 @@ HOC - high order component. Обертка вокруг изначального
 
 <details>
 <summary>Ответ</summary>
+
+Модуль для рендеринга компонентов в зависимости от урла.
 
 </details>
 
@@ -612,6 +869,35 @@ HOC - high order component. Обертка вокруг изначального
 <details>
 <summary>Ответ</summary>
 
+`<NavLink />` - это тот же `<Link />`, только с атрибутами `activeClassName` и `activeStyle`.  
+`activeClassName` применяет класс к ссылке на активный роут.  
+`activeStyle` применяет стиль к ссылке на активный роут.
+
+Как и в случае с `<Route />` выполняется частичное сравнение, поэтому _иногда_ нужно использовать атрибут `exact`.
+
+```jsx
+const Router = () => (
+  <BrowserRouter>
+    <div>
+      <Nav>
+        {/* Саб-роут "/" есть в каждом роуте, */}
+        {/* поэтому для настоящего "/" нужно использовать exact */}
+        <NavLink activeClassName="is-active" to="/" exact>
+          Home
+        </NavLink>
+        <NavLink activeClassName="is-active" to="/about">
+          About
+        </NavLink>
+      </Nav>
+
+      <Match pattern="/" exactly component={Home} />
+      <Match pattern="/about" exactly component={About} />
+      <Miss component={NoMatch} />
+    </div>
+  </BrowserRouter>
+);
+```
+
 </details>
 
 ### 8.3.4 Как программно можно влиять на роут ?
@@ -619,12 +905,16 @@ HOC - high order component. Обертка вокруг изначального
 <details>
 <summary>Ответ</summary>
 
+[Способы программно влиять на роут](https://stackoverflow.com/a/42121109).
+
 </details>
 
-### 8.3.5 `withRouter` ?
+### 8.3.5 Что такое `withRouter` ?
 
 <details>
 <summary>Ответ</summary>
+
+[withRouter](https://reactrouter.com/web/api/withRouter).
 
 </details>
 
@@ -632,5 +922,7 @@ HOC - high order component. Обертка вокруг изначального
 
 <details>
 <summary>Ответ</summary>
+
+[Хуки React Router](https://css-tricks.com/the-hooks-of-react-router/).
 
 </details>
