@@ -1,5 +1,7 @@
 # ^\_^
 
+## 0. [Общие вопросы по проге](./common-coding-stuff/README.md)
+
 ## 1. [Общие приколы JS](./common-js-stuff/README.md)
 
 ## 2. [Типы](./types/README.md)
