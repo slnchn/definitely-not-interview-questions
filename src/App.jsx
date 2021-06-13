@@ -9,7 +9,7 @@ import Accordion from 'components/Accordion';
 function App() {
   return (
     <>
-      <Router>
+      <Router basename="/definitely-not-interview-questions/">
         <>
           <div className="navbar">
             <ul className="navbar-list">
