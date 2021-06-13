@@ -24,6 +24,7 @@ module.exports = {
     path: path.join(__dirname, './dist'),
     filename: '[name].bundle.js',
     assetModuleFilename: 'images/[hash][ext][query]',
+    publicPath: '/',
   },
 
   module: {
@@ -50,5 +51,6 @@ module.exports = {
 
   devServer: {
     port: 3000,
+    historyApiFallback: true,
   },
 };

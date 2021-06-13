@@ -1,27 +1,75 @@
-@import './colors.scss';
-
 .navbar {
-  padding: 0.5rem 0.35rem;
+  padding: 0.5rem 2rem;
   height: 100%;
-  width: 12rem;
-  background-color: $purple-haze;
+  width: 20rem;
+  background-color: #2f3136;
+
+  ul {
+    list-style: none;
+  }
+
+  &__border {
+    margin: 2rem auto;
+    height: 2px;
+    border: none;
+    background-color: #474a4f;
+  }
 
   .navbar-list {
     list-style: none;
 
+    .navbar-list-block {
+      padding: 0.3rem 0.5rem;
+      border-left: 1px solid #1a1c21;
+    }
+
     &__link {
       width: 100%;
+
+      &.block-heading,
+      &.heading {
+        font-size: 1rem;
+        font-weight: bold;
+
+        &:hover {
+          a {
+            color: #ffffff;
+          }
+        }
+
+        a {
+          color: #dcdcde;
+        }
+      }
+
+      &.heading {
+        margin-top: 0.75rem;
+      }
+
+      &.subheading {
+        padding-left: 0.5rem;
+        font-size: 1rem;
+        font-weight: normal;
+
+        &:hover {
+          a {
+            color: #dcdcde;
+          }
+        }
+
+        a {
+          color: #b9b9be;
+        }
+      }
 
       a {
         height: 100%;
         width: 100%;
         display: block;
-        color: #fefefe;
         text-decoration: none;
         cursor: pointer;
 
         &:hover {
-          color: #ff0000;
           text-decoration: underline;
         }
       }
