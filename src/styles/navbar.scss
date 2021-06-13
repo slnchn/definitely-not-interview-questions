@@ -1,0 +1,34 @@
+@import './colors.scss';
+
+.navbar {
+  padding: 0.5rem 0.35rem;
+  height: 100%;
+  width: 12rem;
+  background-color: $purple-haze;
+
+  .navbar-list {
+    list-style: none;
+
+    &__link {
+      width: 100%;
+
+      a {
+        height: 100%;
+        width: 100%;
+        display: block;
+        color: #fefefe;
+        text-decoration: none;
+        cursor: pointer;
+
+        &:hover {
+          color: #ff0000;
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+
+.accordion-content::before {
+  background-color: #261d39 !important;
+}

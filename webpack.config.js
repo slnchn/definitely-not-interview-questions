@@ -4,13 +4,20 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-  entry: ['./src/index.jsx', './src/styles/index.scss'],
   target: 'web',
   devtool: 'source-map',
+  entry: ['./src/index.jsx', './src/styles/index.scss'],
 
   resolve: {
     extensions: ['.js', '.jsx'],
-    alias: {},
+    alias: {
+      assets: path.resolve(__dirname, './src/assets/'),
+      components: path.resolve(__dirname, './src/components/'),
+      constants: path.resolve(__dirname, './src/constants/'),
+      pages: path.resolve(__dirname, './src/pages/'),
+      styles: path.resolve(__dirname, './src/styles/'),
+      utils: path.resolve(__dirname, './src/utils/'),
+    },
   },
 
   output: {
@@ -28,7 +35,7 @@ module.exports = {
       },
       {
         test: /\.(sc|sa|c)ss$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader'],
       },
       { test: /\.(png|svg|jpg|jpeg|gif)$/i, type: 'asset/resource' },
     ],

@@ -4,7 +4,14 @@
     "strict": true,
     "baseUrl": ".",
     "module": "commonjs",
-    "paths": {}
+    "paths": {
+      "assets/*": ["./src/assets/*"],
+      "components/*": ["./src/components/*"],
+      "constants/*": ["./src/constants/*"],
+      "pages/*": ["./src/pages/*"],
+      "styles/*": ["./src/styles/*"],
+      "utils/*": ["./src/utils/*"]
+    }
   },
   "include": ["src"],
   "exclude": ["node_modules"]
