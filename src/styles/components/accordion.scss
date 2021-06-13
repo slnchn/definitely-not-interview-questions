@@ -1,0 +1,62 @@
+$accordion-left-gap: 0.75rem;
+
+.accordion {
+  .accordion-title-block {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__title {
+    flex-grow: 1;
+  }
+
+  &__button {
+    flex-grow: 0;
+    background-color: inherit;
+    border: none;
+    cursor: pointer;
+
+    &:focus {
+      outline: none;
+    }
+
+    &.--opened {
+      img {
+        transform: scaleY(-1);
+      }
+    }
+
+    img {
+      height: 0.75rem;
+      width: 1rem;
+      transition: transform 0.25s ease-in-out;
+    }
+  }
+
+  .accordion-content {
+    position: relative;
+    padding-left: $accordion-left-gap;
+    line-height: 0rem;
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform ease-in-out 0.25s, line-height ease-in-out 0.25s;
+
+    &::before {
+      content: ' ';
+      position: absolute;
+      margin-left: -$accordion-left-gap;
+      height: 100%;
+      width: 0.15rem;
+      background-color: black;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    &.--visible {
+      line-height: 1.2rem;
+      transform: scaleY(1);
+    }
+  }
+}
