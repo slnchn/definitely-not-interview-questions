@@ -1,0 +1,68 @@
+{
+  "name": "definitely-not-interview-questions",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:prod:client": "webpack -c webpack.config.client.js --mode=production",
+    "build:prod:server": "webpack -c webpack.config.server.js --mode=production",
+    "build:dev:client": "webpack -c webpack.config.client.js --mode=development",
+    "build:dev:server:dev": "webpack -c webpack.server.js --mode=development",
+    "watch:client": "webpack -w -c webpack.config.client.js --mode=development",
+    "watch:server": "webpack -w -c webpack.config.server.js --mode=development",
+    "build:prod": "npm-run-all build:prod:*",
+    "build:dev": "npm-run-all build:dev:*",
+    "dev": "npm run build:dev && npm-run-all --parallel watch:* start:dev",
+    "postinstall": "npm run build:prod",
+    "start:prod": "node ./dist/main.bundle.js",
+    "start:dev": "nodemon ./dist/main.bundle.js",
+    "lint": "eslint ./src/**/*.{js,jsx}"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Slnchn/definitely-not-interview-questions.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Slnchn/definitely-not-interview-questions/issues"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.15.7",
+    "@babel/core": "^7.15.5",
+    "@babel/plugin-transform-runtime": "^7.15.0",
+    "@babel/preset-env": "^7.15.6",
+    "@babel/preset-react": "^7.14.5",
+    "babel-loader": "^8.2.2",
+    "css-loader": "^6.3.0",
+    "eslint": "^7.2.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-import-resolver-webpack": "^0.13.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.21.5",
+    "eslint-plugin-react-hooks": "^1.7.0",
+    "html-loader": "^2.1.2",
+    "html-webpack-plugin": "^5.3.2",
+    "ignore-loader": "^0.1.2",
+    "mini-css-extract-plugin": "^2.3.0",
+    "node-sass": "^6.0.1",
+    "nodemon": "^2.0.12",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.4.1",
+    "sass-loader": "^12.1.0",
+    "style-loader": "^3.2.1",
+    "webpack": "^5.53.0",
+    "webpack-cli": "^4.8.0",
+    "webpack-dev-server": "^4.2.1",
+    "webpack-node-externals": "^3.0.0"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  }
+}
