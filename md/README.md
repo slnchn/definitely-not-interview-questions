@@ -13,3 +13,5 @@
 ## 6. [Функции](./functions/README.md)
 
 ## 7. [Асинхронщина](./async/README.md)
+
+## 8. [React]('./react/README.md)
